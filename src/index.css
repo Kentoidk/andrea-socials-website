@@ -1,0 +1,24 @@
+/* Tailwind CSS directives - These are crucial for Tailwind to work */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The following default body and code styles are often provided by create-react-app.
+   We've removed the default font-family for 'body' here because
+   our React component (App.js) already imports and applies the 'Inter' font
+   globally via a <link> tag and a custom <style> block, ensuring consistency. */
+
+body {
+  margin: 0;
+  /* Removed default font-family and font-smoothing properties as they are handled in App.js */
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
