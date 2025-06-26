@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = "build" # This tells Netlify where your built files are
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
