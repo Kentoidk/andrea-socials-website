@@ -176,6 +176,7 @@ function App() {
           </h2>
           <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
             {friendData.socials.map((social) => (
+              // eslint-disable-next-line jsx-a11y/anchor-is-valid
               <a
                 key={social.name}
                 href="#" // Use '#' to prevent default navigation and trigger modal
