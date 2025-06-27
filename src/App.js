@@ -7,7 +7,7 @@ const TwitchIcon = () => (
 );
 
 const InstagramIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucude-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
 );
 
 const DiscordIcon = () => (
@@ -133,9 +133,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-800 to-indigo-900 text-white font-inter flex flex-col items-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
-      {/* Stars Background */}
-      <div id="stars-container" className="absolute inset-0 z-0"></div>
+    <div className="min-h-screen text-white font-inter flex flex-col items-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+      {/* Stars and Galaxy Background Container */}
+      <div id="galaxy-background" className="absolute inset-0 z-0">
+        {/* Main spinning galaxy element */}
+        <div id="spinning-galaxy" className="absolute inset-0"></div>
+      </div>
 
       {/* Main content container */}
       <div className={`
@@ -218,18 +221,66 @@ function App() {
             font-family: 'Inter', sans-serif;
           }
 
-          /* Starfield generation and animation for main background */
+          /* Galaxy Background Generation and Animation */
           .min-h-screen {
             position: relative;
+            background-color: #0d0a1b; /* Even deeper space base */
+            overflow: hidden;
           }
 
-          #stars-container {
-            width: 100%;
-            height: 100%;
+          #galaxy-background {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
             pointer-events: none;
+            background-image:
+              /* Subtle distant nebulae (less prominent to let main galaxy shine) */
+              radial-gradient(circle at 10% 90%, rgba(50, 0, 100, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 90% 10%, rgba(100, 0, 50, 0.05) 0%, transparent 50%);
+            background-size: 200% 200%;
+            background-position: 0% 0%;
+            animation: nebula-drift 60s linear infinite alternate; /* Gentle drift for background nebulae */
           }
 
-          #stars-container::before {
+          /* Spinning Galaxy specific styling - aiming for the provided image */
+          #spinning-galaxy {
+            position: absolute;
+            /* Using vw/vh for size to ensure responsiveness */
+            width: 150vw; /* Make it large enough to comfortably spin across the screen */
+            height: 150vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg); /* Initial state for animation */
+            transform-origin: center center; /* Ensure it spins from its center */
+
+            background-image:
+              /* Galaxy Core - Brighter White/Yellow */
+              radial-gradient(circle at 50% 50%, rgba(255, 255, 200, 0.6) 0%, transparent 5%),
+              radial-gradient(circle at 50% 50%, rgba(255, 200, 150, 0.4) 0%, transparent 12%),
+
+              /* Spiral Arms - Richer Pinks, Purples, Blues */
+              /* Arm 1 (Pink/Reddish) */
+              radial-gradient(ellipse 75% 30% at 65% 45%, rgba(255, 50, 150, 0.4) 0%, transparent 40%),
+              radial-gradient(ellipse 70% 35% at 60% 40%, rgba(255, 100, 200, 0.3) 0%, transparent 45%),
+
+              /* Arm 2 (Purple/Blue) */
+              radial-gradient(ellipse 75% 30% at 35% 55%, rgba(100, 0, 255, 0.4) 0%, transparent 40%),
+              radial-gradient(ellipse 70% 35% at 40% 60%, rgba(150, 50, 255, 0.3) 0%, transparent 45%),
+
+              /* Smaller, trailing wisps/branches */
+              radial-gradient(ellipse 40% 70% at 75% 30%, rgba(0, 200, 255, 0.2) 0%, transparent 30%),
+              radial-gradient(ellipse 45% 65% at 25% 70%, rgba(255, 150, 0, 0.15) 0%, transparent 35%);
+
+
+            background-size: cover; /* Important for gradients to scale with the div */
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: spin 120s linear infinite; /* Adjusted duration for smoother, continuous spin */
+            opacity: 1; /* Full opacity for the main galaxy structure */
+          }
+
+          /* Starfield generation (applied directly to #galaxy-background::before) */
+          #galaxy-background::before {
             content: '';
             position: absolute;
             top: 0;
@@ -237,34 +288,34 @@ function App() {
             width: 1px;
             height: 1px;
             background: transparent;
+            /* Denser and more varied stars */
             box-shadow:
-              ${Array.from({ length: 700 }).map(() => `${Math.random() * 200}vw ${Math.random() * 200}vh #fff`).join(',')},
-              ${Array.from({ length: 200 }).map(() => `${Math.random() * 200}vw ${Math.random() * 200}vh #fff`).join(',')},
-              ${Array.from({ length: 50 }).map(() => `${Math.random() * 200}vw ${Math.random() * 200}vh #fff`).join(',')};
-            animation: stars-twinkle 150s linear infinite;
-            opacity: 0.8;
+              ${Array.from({ length: 2500 }).map(() => `${Math.random() * 100}vw ${Math.random() * 100}vh rgba(255, 255, 255, ${0.4 + Math.random() * 0.6})`).join(',')}, /* Layer 1: Smallest, most numerous stars, varied opacity */
+              ${Array.from({ length: 800 }).map(() => `${Math.random() * 100}vw ${Math.random() * 100}vh rgba(255, 255, 255, ${0.6 + Math.random() * 0.4})`).join(',')}, /* Layer 2: Medium stars, higher opacity */
+              ${Array.from({ length: 200 }).map(() => `${Math.random() * 100}vw ${Math.random() * 100}vh #fff`).join(',')}; /* Layer 3: Largest, fewest stars, full opacity */
+            animation: stars-twinkle 150s linear infinite; /* Slower movement */
           }
 
           @keyframes stars-twinkle {
-            from {
-              transform: translateY(0);
-            }
-            to {
-              transform: translateY(-100vh);
-            }
+            from { transform: translateY(0); }
+            to { transform: translateY(-100vh); } /* Moves stars upwards */
+          }
+
+          @keyframes nebula-drift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+          }
+
+          @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
           }
 
           /* Fading border effect */
           @keyframes fading-border-pulse {
-            0% {
-              border-color: rgba(139, 92, 246, 0.3);
-            }
-            50% {
-              border-color: rgba(139, 92, 246, 0.8);
-            }
-            100% {
-              border-color: rgba(139, 92, 246, 0.3);
-            }
+            0% { border-color: rgba(139, 92, 246, 0.3); }
+            50% { border-color: rgba(139, 92, 246, 0.8); }
+            100% { border-color: rgba(139, 92, 246, 0.3); }
           }
           .fading-border {
             border: 2px solid;
